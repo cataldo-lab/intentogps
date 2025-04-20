@@ -28,23 +28,9 @@ const router = createBrowserRouter([
         </ProtectedRoute>
         ),
     },
-    {
-      path: '/notas', // Nueva ruta para Notas
-      element: (
-        <ProtectedRoute allowedRoles={['alumno']}>
-          <NotasPage />
-        </ProtectedRoute>
-      ),
-    },
     
-    {
-      path: '/lista-alumnos', // Ruta para ListaAlumnoPage
-      element: (
-        <ProtectedRoute allowedRoles={['profesor']}>
-          <ListaAlumnoPage />
-        </ProtectedRoute>
-      ),
-    }
+    
+    
 
 
     ]
