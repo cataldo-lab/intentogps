@@ -34,7 +34,7 @@ export default function Popup({ show, setShow, data, action }: PopupProps) {
         <div className="bg">
           <div className="popup">
             <button className="close" onClick={() => setShow(false)}>
-              <img src={CloseIcon} />
+              <img src={CloseIcon} alt="Close" />
             </button>
             <Form
               title="Editar usuario"
@@ -92,7 +92,7 @@ export default function Popup({ show, setShow, data, action }: PopupProps) {
                     <span>
                       Nueva contraseña
                       <span className="tooltip-icon">
-                        <img src={QuestionIcon} />
+                        <img src={QuestionIcon} alt="Help" />
                         <span className="tooltip-text">Este campo es opcional</span>
                       </span>
                     </span>
