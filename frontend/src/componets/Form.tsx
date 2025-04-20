@@ -4,20 +4,43 @@ import '@styles/form.css';
 import HideIcon from '../assets/HideIcon.svg';
 import ViewIcon from '../assets/ViewIcon.svg';
 
-const Form = ({ title, fields, buttonText, onSubmit, footerContent, backgroundColor }) => {
+interface Field {
+    label?: string | JSX.Element;
+    name: string;
+    placeholder?: string;
+    type?: string;
+    fieldType: 'input' | 'textarea' | 'select';
+    defaultValue?: string;
+    required?: boolean;
+    minLength?: number;
+    maxLength?: number;
+    pattern?: RegExp;
+    patternMessage?: string;
+    errorMessageData?: string;
+    disabled?: boolean;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+    options?: { value: string; label: string }[];
+    validate?: Record<string, (value: any) => boolean | string>;
+}
+
+interface FormProps {
+    title: string;
+    fields: Field[];
+    buttonText?: string;
+    onSubmit: (data: any) => void;
+    footerContent?: JSX.Element;
+    backgroundColor?: string;
+}
+
+const Form = ({ title, fields, buttonText, onSubmit, footerContent, backgroundColor }: FormProps) => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [showPassword, setShowPassword] = useState(false);
     const [showNewPassword, setShowNewPassword] = useState(false);
 
-    const togglePasswordVisibility = () => {
-        setShowPassword(!showPassword);
-    };
+    const togglePasswordVisibility = () => setShowPassword(!showPassword);
+    const toggleNewPasswordVisibility = () => setShowNewPassword(!showNewPassword);
 
-    const toggleNewPasswordVisibility = () => {
-        setShowNewPassword(!showNewPassword);
-    };
-
-    const onFormSubmit = (data) => {
+    const onFormSubmit = (data: any) => {
         onSubmit(data);
     };
 
@@ -36,16 +59,16 @@ const Form = ({ title, fields, buttonText, onSubmit, footerContent, backgroundCo
                         <input
                             {...register(field.name, {
                                 required: field.required ? 'Este campo es obligatorio' : false,
-                                minLength: field.minLength ? { value: field.minLength, message: `Debe tener al menos ${field.minLength} caracteres` } : false,
-                                maxLength: field.maxLength ? { value: field.maxLength, message: `Debe tener máximo ${field.maxLength} caracteres` } : false,
-                                pattern: field.pattern ? { value: field.pattern, message: field.patternMessage || 'Formato no válido' } : false,
-                                validate: field.validate || {},
+                                minLength: field.minLength ? { value: field.minLength, message: `Debe tener al menos ${field.minLength} caracteres` } : undefined,
+                                maxLength: field.maxLength ? { value: field.maxLength, message: `Debe tener máximo ${field.maxLength} caracteres` } : undefined,
+                                pattern: field.pattern ? { value: field.pattern, message: field.patternMessage || 'Formato no válido' } : undefined,
+                                validate: field.validate,
                             })}
                             name={field.name}
                             placeholder={field.placeholder}
                             type={field.type === 'password' && field.name === 'password' ? (showPassword ? 'text' : 'password') :
                                 field.type === 'password' && field.name === 'newPassword' ? (showNewPassword ? 'text' : 'password') :
-                                field.type}
+                                    field.type}
                             defaultValue={field.defaultValue || ''}
                             disabled={field.disabled}
                             onChange={field.onChange}
@@ -55,10 +78,10 @@ const Form = ({ title, fields, buttonText, onSubmit, footerContent, backgroundCo
                         <textarea
                             {...register(field.name, {
                                 required: field.required ? 'Este campo es obligatorio' : false,
-                                minLength: field.minLength ? { value: field.minLength, message: `Debe tener al menos ${field.minLength} caracteres` } : false,
-                                maxLength: field.maxLength ? { value: field.maxLength, message: `Debe tener máximo ${field.maxLength} caracteres` } : false,
-                                pattern: field.pattern ? { value: field.pattern, message: field.patternMessage || 'Formato no válido' } : false,
-                                validate: field.validate || {},
+                                minLength: field.minLength ? { value: field.minLength, message: `Debe tener al menos ${field.minLength} caracteres` } : undefined,
+                                maxLength: field.maxLength ? { value: field.maxLength, message: `Debe tener máximo ${field.maxLength} caracteres` } : undefined,
+                                pattern: field.pattern ? { value: field.pattern, message: field.patternMessage || 'Formato no válido' } : undefined,
+                                validate: field.validate,
                             })}
                             name={field.name}
                             placeholder={field.placeholder}
@@ -71,7 +94,7 @@ const Form = ({ title, fields, buttonText, onSubmit, footerContent, backgroundCo
                         <select
                             {...register(field.name, {
                                 required: field.required ? 'Este campo es obligatorio' : false,
-                                validate: field.validate || {},
+                                validate: field.validate,
                             })}
                             name={field.name}
                             defaultValue={field.defaultValue || ''}
@@ -79,7 +102,7 @@ const Form = ({ title, fields, buttonText, onSubmit, footerContent, backgroundCo
                             onChange={field.onChange}
                         >
                             <option value="">Seleccionar opción</option>
-                            {field.options && field.options.map((option, optIndex) => (
+                            {field.options?.map((option, optIndex) => (
                                 <option className="options-class" key={optIndex} value={option.value}>
                                     {option.label}
                                 </option>

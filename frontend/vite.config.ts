@@ -1,13 +1,11 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import path from 'path';
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import  path from 'path';
 import { fileURLToPath } from 'url';
-
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
   preview: {port:443, host:true},
@@ -22,5 +20,6 @@ export default defineConfig({
       '@assets': path.resolve(__dirname, './src/assets'),
       '@helpers': path.resolve(__dirname, './src/helpers')
     }
-  }
+  },
+  
 });
